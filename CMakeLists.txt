@@ -10,10 +10,15 @@ project(test_package)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  roslaunch
+  nodelet
 )
 
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system)
+
+#adding launch files:
+roslaunch_add_file_check(launch)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -102,10 +107,8 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES test_package
-#  CATKIN_DEPENDS roscpp std_msgs
-#  DEPENDS system_lib
+  LIBRARIES test_nodelet
+  CATKIN_DEPENDS roscpp std_msgs nodelet
 )
 
 ###########
@@ -120,9 +123,7 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/test_package.cpp
-# )
+add_library(test_nodelet src/test_nodelet.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -148,12 +149,17 @@ add_executable(receive_node src/recv_node.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
-  ${PROJECT_NAME}_node
+  ${PROJECT_NAME}_node  
   ${catkin_LIBRARIES}
 )
 
 target_link_libraries(
   receive_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+  test_nodelet
   ${catkin_LIBRARIES}
 )
 

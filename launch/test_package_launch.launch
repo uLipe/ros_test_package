@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="nodelet" type="nodelet" name="man" args="manager" output="screen"/>
+    <node pkg="nodelet" type="nodelet" name="TestNodelet" args="load test_package/TestNodelet man" output="screen"/>
+    <node name = "test_package_node" pkg="test_package" type="test_package_node"/>
+    <node name = "receive_node" pkg="test_package" type="receive_node"/>
+</launch>

@@ -1,0 +1,9 @@
+<library path="lib/libtest_nodelet">
+    <class name ="test_package/TestNodelet" 
+        type="test_package::TestNodelet"
+        base_class_type="nodelet::Nodelet">
+        <description>
+            just for fun
+        </description>
+        </class>
+</library>    
