@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roslaunch
   nodelet
+  message_runtime
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -58,11 +60,10 @@ roslaunch_add_file_check(launch)
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+     FILES
+     test_service.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -72,10 +73,10 @@ roslaunch_add_file_check(launch)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -125,16 +126,17 @@ include_directories(
 ## Declare a C++ library
 add_library(test_nodelet src/test_nodelet.cpp)
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/test_node.cpp )
 add_executable(receive_node src/recv_node.cpp)
+add_executable(server_node src/server_node.cpp) 
+add_executable(client_node src/client_node.cpp) 
+
+add_dependencies(server_node test_package_generate_messages_cpp) 
+add_dependencies(client_node test_package_generate_messages_cpp) 
 
 
 ## Rename C++ executable without prefix
@@ -145,7 +147,7 @@ add_executable(receive_node src/recv_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
@@ -155,6 +157,16 @@ target_link_libraries(
 
 target_link_libraries(
   receive_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+  server_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+  client_node
   ${catkin_LIBRARIES}
 )
 
